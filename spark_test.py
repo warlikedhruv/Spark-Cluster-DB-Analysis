@@ -37,7 +37,8 @@
 #
 #     df = connect_to_sql(spark, 'localhost', '3306', 'AMS', 'crew', 'root', 'password')
 
-
+import os
+os.system('pip install findspark')
 import findspark
 findspark.init()
 
