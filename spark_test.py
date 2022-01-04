@@ -12,6 +12,7 @@ def connect_to_sql(spark, jdbc_hostname, jdbc_port, database, data_table, userna
     }
 
     df = spark.read.jdbc(url=jdbc_url, table=data_table, properties=connection_details)
+
     return df
 
 
@@ -29,5 +30,5 @@ if __name__ == '__main__':
 
     df = connect_to_sql(spark, 'host.docker.internal', '3306', 'spark_test_db1', 'dummy_data_1', 'root', 'password')
     print("DATA FRAME CREATED")
-    print(df)
+    print(df.show())
 
