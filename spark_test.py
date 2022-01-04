@@ -8,14 +8,14 @@ def connect_to_sql(
     connection_details = {
         "user": username,
         "password": password,
-        "driver": "com.mysql.cj.jdbc.Driver",
+        "driver": "com.mysql.jdbc.Driver",
     }
 
     df = spark.read.jdbc(url=jdbc_url, table=data_table, properties=connection_details)
     return df
 
 if __name__=='__main__':
-    mysql_path = os.getcwd()+ "/mysql-connector-java-5.1.34"
+    mysql_path = os.getcwd()+ "/mysql-connector-java-5.1.39"
     spark = SparkSession \
         .builder \
         .appName('test') \
