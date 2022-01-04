@@ -8,7 +8,7 @@ def connect_to_sql(
     connection_details = {
         "user": username,
         "password": password,
-        "driver": "/usr/bin/spark-3.0.0-bin-hadoop2.7/mysql-connector-java-5.1.34.jar",
+        "driver": os.getcwd()+ "/mysql-connector-java-5.1.34.jar",
     }
 
     df = spark.read.jdbc(url=jdbc_url, table=data_table, properties=connection_details)
