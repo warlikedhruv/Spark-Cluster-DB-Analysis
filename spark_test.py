@@ -15,12 +15,13 @@ def connect_to_sql(
     return df
 
 if __name__=='__main__':
+    mysql_path = os.getcwd()+ "/mysql-connector-java-5.1.34"
     spark = SparkSession \
         .builder \
         .appName('test') \
         .master('local[*]') \
         .enableHiveSupport() \
-        .config("spark.driver.extraClassPath", os.getcwd()+ "/mysql-connector-java-5.1.34.jar" ) \
+        .config("spark.driver.extraClassPath", mysql_path ) \
         .getOrCreate()
 
     df = connect_to_sql(spark, 'localhost', '3306', 'AMS', 'crew', 'root', 'password')
