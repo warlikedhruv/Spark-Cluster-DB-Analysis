@@ -16,6 +16,10 @@ def connect_to_sql(spark, jdbc_hostname, jdbc_port, database, data_table, userna
     print("os path", os.getcwd())
     mysql_path = os.getcwd() + "/mysql-connector-java-5.1.39"
     print("MY SQL PATh", mysql_path)
+    if os.path.exists(mysql_path):
+        print("SQL PATH EXISTS")
+    else:
+        print("SQL PATH DOES NOT EXISTS")
     return None
 
 
