@@ -40,7 +40,7 @@
 import os
 os.system('pip install findspark')
 import findspark
-findspark.init()
+findspark.add_packages('mysql:mysql-connector-java:8.0.11')
 
 import pyspark # only run after findspark.init()
 from pyspark.sql import SparkSession
