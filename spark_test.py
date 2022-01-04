@@ -24,7 +24,7 @@ def compare_df(df1, df2):
         array_remove(array(*conditions_), "").alias("column_names")
     ]
 
-    df1.join(df2, "id").select(*select_expr).show()
+    df1.join(df2, "id").select(*select_expr).show(truncate = False)
 
 
 if __name__ == '__main__':
