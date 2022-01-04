@@ -49,10 +49,10 @@ from pyspark import SparkConf, SparkContext
 spark = SparkSession.builder.getOrCreate()
 
 dataframe_mysql = spark.read.format("jdbc").options(
-    url="jdbc:mysql://127.0.0.1:3306/AMS",
+    url="jdbc:mysql://db.cs.dal.ca/dhruvkumar",
     driver = "com.mysql.jdbc.Driver",
     dbtable = "company",
-    user="root",
-    password="password").load()
+    user="dhruvkumar",
+    password="Wp6CRupcXtdqWnW96CQXKcMcD").load()
 
 dataframe_mysql.show()
