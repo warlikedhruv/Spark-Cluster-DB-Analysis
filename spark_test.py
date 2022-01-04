@@ -49,7 +49,7 @@ from pyspark import SparkConf, SparkContext
 spark = SparkSession.builder.getOrCreate()
 
 dataframe_mysql = spark.read.format("jdbc").options(
-    url="jdbc:mysql://db.cs.dal.ca/dhruvkumar",
+    url="jdbc:mysql://db.cs.dal.ca:3306/dhruvkumar",
     driver = "com.mysql.cj.jdbc.Driver",
     dbtable = "company",
     user="dhruvkumar",
