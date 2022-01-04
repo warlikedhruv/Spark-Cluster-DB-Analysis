@@ -38,12 +38,14 @@
 #     df = connect_to_sql(spark, 'localhost', '3306', 'AMS', 'crew', 'root', 'password')
 
 import os
-os.system('pip install findspark')
-import findspark
-findspark.add_packages('mysql:mysql-connector-java:8.0.11')
 
 import pyspark # only run after findspark.init()
 from pyspark.sql import SparkSession
+from pyspark import SparkConf, SparkContext
+
+# SUBMIT_ARGS = "--packages mysql:" + os.getcwd()+ "/mysql-connector-java:5.1.34 pyspark-shell"
+# os.environ["PYSPARK_SUBMIT_ARGS"] = SUBMIT_ARGS
+# conf = SparkConf()
 spark = SparkSession.builder.getOrCreate()
 
 dataframe_mysql = spark.read.format("jdbc").options(
