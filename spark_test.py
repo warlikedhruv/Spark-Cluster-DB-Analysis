@@ -35,7 +35,7 @@ if __name__ == '__main__':
         .config("spark.driver.extraClassPath", mysql_path) \
         .getOrCreate()
 
-    df = connect_to_sql(spark, 'db.cs.dal.ca', '3306', 'dhruvkumar', 'test', 'dhruvkumar', 'Wp6CRupcXtdqWnW96CQXKcMcD')
+    df = connect_to_sql(spark, 'host.docker.internal', '3306', 'AMS', 'crew', 'root', 'password')
 
 # import os
 #
