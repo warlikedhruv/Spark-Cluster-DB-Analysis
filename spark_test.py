@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 import os
-
+from pyspark.sql.functions import col, array, when, array_remove
 
 def connect_to_sql(spark, jdbc_hostname, jdbc_port, database, data_table, username, password):
     jdbc_url = "jdbc:mysql://{0}:{1}/{2}".format(jdbc_hostname, jdbc_port, database)
@@ -15,7 +15,16 @@ def connect_to_sql(spark, jdbc_hostname, jdbc_port, database, data_table, userna
 
     return df
 
+def compare_df(df1, df2):
+    conditions_ = [when(df1[c] != df2[c], list(c)).otherwise("") for c in df1.columns if c != 'id']
 
+    select_expr = [
+        col("id"),
+        *[df2[c] for c in df2.columns if c != 'id'],
+        array_remove(array(*conditions_), "").alias("column_names")
+    ]
+
+    df1.join(df2, "id").select(*select_expr).show()
 
 
 if __name__ == '__main__':
@@ -33,4 +42,5 @@ if __name__ == '__main__':
     print("DATA FRAME CREATED")
     print(df1.show())
     print(df2.show())
+    compare_df(df1, df2)
 
