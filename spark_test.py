@@ -28,7 +28,9 @@ if __name__ == '__main__':
         .config("spark.driver.extraClassPath", mysql_path) \
         .getOrCreate()
 
-    df = connect_to_sql(spark, 'host.docker.internal', '3306', 'spark_test_db1', 'dummy_data_1', 'root', 'password')
+    df1 = connect_to_sql(spark, 'host.docker.internal', '3306', 'spark_test_db1', 'dummy_data_1', 'root', 'password')
+    df2 = connect_to_sql(spark, 'host.docker.internal', '3306', 'spark_test_db1', 'dummy_data_2', 'root', 'password')
     print("DATA FRAME CREATED")
-    print(df.show())
+    print(df1.show())
+    print(df2.show())
 
