@@ -16,7 +16,7 @@ def connect_to_sql(spark, jdbc_hostname, jdbc_port, database, data_table, userna
     return df
 
 def compare_df(df1, df2):
-    conditions_ = [when(df1[c] != df2[c], lit(c)).otherwise("") for c in df1.columns if c != 'id']
+    conditions_ = [when(df1[c] != df2[c], str(c)).otherwise("") for c in df1.columns if c != 'id']
 
     select_expr = [
         col("id"),
