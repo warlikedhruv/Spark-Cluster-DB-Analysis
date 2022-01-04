@@ -14,7 +14,7 @@ def connect_to_sql(spark, jdbc_hostname, jdbc_port, database, data_table, userna
     # df = spark.read.jdbc(url=jdbc_url, table=data_table, properties=connection_details)
     # return df
     print("os path", os.getcwd())
-    mysql_path = os.getcwd() + "/mysql-connector-java-5.1.39.jar"
+    mysql_path = os.getcwd() + "/mysql-connector-java-5.1.34.jar"
     print("MY SQL PATh", mysql_path)
     print("ABS PATH", os.path.abspath(os.getcwd()))
     if os.path.exists(mysql_path):
