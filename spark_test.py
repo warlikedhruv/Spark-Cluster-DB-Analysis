@@ -50,7 +50,7 @@ spark = SparkSession.builder.getOrCreate()
 
 dataframe_mysql = spark.read.format("jdbc").options(
     url="jdbc:mysql://db.cs.dal.ca/dhruvkumar",
-    driver = "com.mysql.jdbc.Driver",
+    driver = "com.mysql.cj.jdbc.Driver",
     dbtable = "company",
     user="dhruvkumar",
     password="Wp6CRupcXtdqWnW96CQXKcMcD").load()
