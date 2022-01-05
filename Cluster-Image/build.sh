@@ -7,20 +7,24 @@ JUPYTERLAB_VERSION="2.1.5"
 # -- Building the Images
 
 docker build \
+  --no-cache \
   -f Cluster-Base-Image.Dockerfile \
   -t cluster-base .
 
 docker build \
+  --no-cache \
   --build-arg spark_version="${SPARK_VERSION}" \
   --build-arg hadoop_version="${HADOOP_VERSION}" \
   -f Spark-Base-Image.Dockerfile \
   -t spark-base .
 
 docker build \
+  --no-cache \
   -f Spark-Master-Image.Dockerfile \
   -t spark-master .
 
 docker build \
+  --no-cache \
   -f Spark-Worker-Image.Dockerfile \
   -t spark-worker .
 
@@ -29,3 +33,6 @@ docker build \
   --build-arg jupyterlab_version="${JUPYTERLAB_VERSION}" \
   -f jupyterlab.Dockerfile \
   -t jupyterlab .
+
+
+docker-compose up
