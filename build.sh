@@ -35,4 +35,4 @@ docker build \
   -t jupyterlab .
 
 
-docker-compose up
+./Cluster-Image/docker-compose up
