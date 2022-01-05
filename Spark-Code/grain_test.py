@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 import os
-from pyspark.sql.functions import col, array, when, array_remove
+from pyspark.sql.functions import col, array, when, array_remove, lit
 
 
 def connect_to_sql(spark, jdbc_hostname, jdbc_port, database, data_table, username, password):
@@ -49,7 +49,9 @@ def compare_df(original_table_df, target_table_df, primary_key):
     :param primary_key:
     :return:
     """
-    conditions_ = [when(original_table_df[c] != target_table_df[c], [c,original_table_df[c], target_table_df[c]]).otherwise("") for c in original_table_df.columns if c != primary_key]
+    conditions_ = [when(original_table_df[c] != target_table_df[c],
+                        [lit(c), original_table_df[lit(c)], target_table_df[lit(c)]]).otherwise("")
+                   for c in original_table_df.columns if c != primary_key]
 
     select_expr = [
         col(primary_key),
