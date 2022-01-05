@@ -49,8 +49,10 @@ def compare_df(original_table_df, target_table_df, primary_key):
     :param primary_key:
     :return:
     """
-    conditions_ = [when(original_table_df[c] != target_table_df[c], {c,(original_table_df[c], target_table_df[c]) }).otherwise("") for c in
-                   original_table_df.columns if c != primary_key]
+    conditions_ = [
+        when(original_table_df[c] != target_table_df[c], {c, (original_table_df[c], target_table_df[c])}).otherwise("")
+        for c in
+        original_table_df.columns if c != primary_key]
 
     select_expr = [
         col(primary_key),
@@ -59,3 +61,29 @@ def compare_df(original_table_df, target_table_df, primary_key):
     ]
 
     original_table_df.join(target_table_df, primary_key).select(*select_expr).show(original_table_df.count())
+
+
+def main():
+    """
+
+    :return:
+    """
+    mysql_path = "/usr/bin/spark-3.0.0-bin-hadoop2.7/mysql-connector-java-8.0.27.jar"
+    spark = SparkSession \
+        .builder \
+        .appName('test') \
+        .master('local[*]') \
+        .enableHiveSupport() \
+        .config("spark.driver.extraClassPath", mysql_path) \
+        .getOrCreate()
+    source_table_config = {"hostname": "host.docker.internal", "port": "3306", "database": "spark_test_db1",
+                           "table_or_query": "dummy_data_1", "user": "root", "password": "password"}
+    target_table_config = {"hostname": "host.docker.internal", "port": "3306", "database": "spark_test_db1",
+                           "table_or_query": "dummy_data_2", "user": "root", "password": "password"}
+
+    source_df = create_df(spark, source_table_config)
+    target_df = create_df(spark, target_table_config)
+    compare_df(source_df, target_df, primary_key="id")
+
+if __name__ == '__main__':
+    main()
