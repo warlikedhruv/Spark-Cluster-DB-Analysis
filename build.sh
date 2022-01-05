@@ -36,7 +36,7 @@ docker build \
 
 # shellcheck disable=SC2164
 cd ./Cluster-Image
-/docker-compose up
+docker-compose up
 # shellcheck disable=SC2103
 cd ..
 echo "Cluster Running"
