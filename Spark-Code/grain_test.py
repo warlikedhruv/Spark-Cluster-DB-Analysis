@@ -1,7 +1,7 @@
 from pyspark.sql import SparkSession
 import os
 from pyspark.sql.functions import col, array, when, array_remove, lit
-
+import pyspark.sql.functions as f
 
 def connect_to_sql(spark, jdbc_hostname, jdbc_port, database, data_table, username, password):
     """
@@ -24,6 +24,7 @@ def connect_to_sql(spark, jdbc_hostname, jdbc_port, database, data_table, userna
     }
 
     df = spark.read.jdbc(url=jdbc_url, table=data_table, properties=connection_details)
+
     return df
 
 
@@ -49,17 +50,25 @@ def compare_df(original_table_df, target_table_df, primary_key):
     :param primary_key:
     :return:
     """
-    conditions_ = [when(original_table_df[c] != target_table_df[c],
-                        [lit(c), original_table_df[lit(c)], target_table_df[lit(c)]]).otherwise("")
-                   for c in original_table_df.columns if c != primary_key]
+    # conditions_ = [when(original_table_df[c] != target_table_df[c], str(c)).otherwise("")
+    #                for c in original_table_df.columns if c != primary_key]
 
-    select_expr = [
-        col(primary_key),
-        *[target_table_df[c] for c in target_table_df.columns if c != primary_key],
-        array_remove(array(*conditions_), "").alias("column_names")
-    ]
+    # select_expr = [
+    #     col(primary_key),
+    #     *[target_table_df[c] for c in target_table_df.columns if c != primary_key],
+    #     array_remove(array(*conditions_), "").alias("column_names")
+    # ]
+    #
+    # original_table_df.join(target_table_df, primary_key).select(*select_expr).show(original_table_df.count())
 
-    original_table_df.join(target_table_df, primary_key).select(*select_expr).show(original_table_df.count())
+    columns = original_table_df.columns
+    df3 = original_table_df.alias("d1").join(target_table_df.alias("d2"), f.col("d1.id") == f.col("d2.id"), "left")
+
+    for name in columns:
+        df3 = df3.withColumn(name + "_temp", f.when(f.col("d1." + name) != f.col("d2." + name), f.lit(name)))
+
+    df3.withColumn("column_names", f.concat_ws(",", *map(lambda name: f.col(name + "_temp"), columns))).select("d1.*",
+                                                                                                               "column_names").show(original_table_df.count())
 
 
 def main():
