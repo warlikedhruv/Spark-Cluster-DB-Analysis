@@ -49,7 +49,7 @@ def compare_df(original_table_df, target_table_df, primary_key):
     :param primary_key:
     :return:
     """
-    conditions_ = [when(original_table_df[c] != target_table_df[c], str(c)).otherwise("") for c in original_table_df.columns if c != primary_key]
+    conditions_ = [when(original_table_df[c] != target_table_df[c], [c,original_table_df[c], target_table_df[c]]).otherwise("") for c in original_table_df.columns if c != primary_key]
 
     select_expr = [
         col(primary_key),
