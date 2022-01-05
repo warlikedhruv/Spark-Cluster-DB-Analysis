@@ -5,11 +5,11 @@
 Inside Cluster-Image "build.sh" will build image and compose cluster
 ### For Linux Machines
 ```bash
-sh Cluster-Image/build.sh
+sh build.sh
 ```
 ### For Windows Machines with git bash
 ```bash
-bash Cluster-Image/build.sh
+bash build.sh
 ```
 
 
