@@ -1,5 +1,5 @@
 # -- Software Stack Version
-
+echo "Building Cluster"
 SPARK_VERSION="3.0.0"
 HADOOP_VERSION="2.7"
 JUPYTERLAB_VERSION="2.1.5"
@@ -34,5 +34,9 @@ docker build \
   -f ./Cluster-Image/jupyterlab.Dockerfile \
   -t jupyterlab .
 
-
-./Cluster-Image/docker-compose up
+# shellcheck disable=SC2164
+cd ./Cluster-Image
+/docker-compose up
+# shellcheck disable=SC2103
+cd ..
+echo "Cluster Running"
