@@ -75,7 +75,9 @@ def compare_df(original_table_df, target_table_df, primary_key):
 def main(source_table_config,target_table_config ):
     """
 
-    :return:
+    :param source_table_config: Dict with db connections
+    :param target_table_config: Dict with db connections
+    :return: None
     """
     mysql_path = "/usr/bin/spark-3.0.0-bin-hadoop2.7/mysql-connector-java-8.0.27.jar"
     spark = SparkSession \
@@ -111,5 +113,4 @@ if __name__ == '__main__':
     target_table_config = {"hostname": args.TargetHostName, "port": args.TargetPort, "database": args.TargetDatabase,
                            "table_or_query": args.TargetTableOrQuery, "user": args.TargetUser, "password": args.TargetPassword}
 
-   # main(source_table_config, target_table_config)
-    print(source_table_config, target_table_config)
+    main(source_table_config, target_table_config)
