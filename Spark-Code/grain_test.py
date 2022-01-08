@@ -112,5 +112,5 @@ if __name__ == '__main__':
                            "table_or_query": args.SourceTableOrQuery, "user": args.SourceUser, "password":args.SourcePassword}
     target_table_config = {"hostname": args.TargetHostName, "port": args.TargetPort, "database": args.TargetDatabase,
                            "table_or_query": args.TargetTableOrQuery, "user": args.TargetUser, "password": args.TargetPassword}
-    print(source_table_config, target_table_config)
+    
     main(source_table_config, target_table_config)

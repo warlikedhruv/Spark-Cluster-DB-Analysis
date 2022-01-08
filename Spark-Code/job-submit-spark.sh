@@ -13,18 +13,6 @@ TargetTableOrQuery=${10}
 TargetUser=${11}
 TargetPassword=${12}
 
-echo "$SourceHostName"
-echo "$SourcePort"
-echo "$SourceDatabase"
-echo "$SourceTableOrQuery"
-echo "$SourceUser"
-echo "$SourcePassword"
-echo "$TargetHostName"
-echo "$TargetPort"
-echo "$TargetDatabase"
-echo "$TargetTableOrQuery"
-echo "$TargetUser"
-echo "$TargetPassword"
 
 /usr/bin/spark-3.0.0-bin-hadoop2.7/bin/spark-submit \
 --jars /usr/bin/spark-3.0.0-bin-hadoop2.7/jars/mysql-connector-java-8.0.27.jar \
