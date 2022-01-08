@@ -2,6 +2,7 @@ from pyspark.sql import SparkSession
 import os
 from pyspark.sql.functions import col, array, when, array_remove, lit
 import pyspark.sql.functions as f
+import argparse
 
 def connect_to_sql(spark, jdbc_hostname, jdbc_port, database, data_table, username, password):
     """
@@ -71,7 +72,7 @@ def compare_df(original_table_df, target_table_df, primary_key):
                                                                                                                "column_names").show(original_table_df.count())
 
 
-def main():
+def main(source_table_config,target_table_config ):
     """
 
     :return:
@@ -84,14 +85,31 @@ def main():
         .enableHiveSupport() \
         .config("spark.driver.extraClassPath", mysql_path) \
         .getOrCreate()
-    source_table_config = {"hostname": "host.docker.internal", "port": "3306", "database": "spark_test_db1",
-                           "table_or_query": "dummy_data_1", "user": "root", "password": "password"}
-    target_table_config = {"hostname": "host.docker.internal", "port": "3306", "database": "spark_test_db1",
-                           "table_or_query": "dummy_data_2", "user": "root", "password": "password"}
 
     source_df = create_df(spark, source_table_config)
     target_df = create_df(spark, target_table_config)
     compare_df(source_df, target_df, primary_key="id")
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--SourceHostName', type=str, required=True)
+    parser.add_argument('--SourcePort', type=str, required=True)
+    parser.add_argument('--SourceDatabase', type=str, required=True)
+    parser.add_argument('--SourceTableOrQuery', type=str, required=True)
+    parser.add_argument('--SourceUser', type=str, required=True)
+    parser.add_argument('--SourcePassword', type=str, required=True)
+
+    parser.add_argument('--TargetHostName', type=str, required=True)
+    parser.add_argument('--TargetPort', type=str, required=True)
+    parser.add_argument('--TargetDatabase', type=str, required=True)
+    parser.add_argument('--TargetTableOrQuery', type=str, required=True)
+    parser.add_argument('--TargetUser', type=str, required=True)
+    parser.add_argument('--TargetPassword', type=str, required=True)
+    args = parser.parse_args()
+    source_table_config = {"hostname": args.SourceHostName, "port": args.SourcePort, "database": args.SourceDatabase,
+                           "table_or_query": args.SourceTableOrQuery, "user": args.SourceUser, "password":args.SourcePassword}
+    target_table_config = {"hostname": args.TargetHostName, "port": args.TargetPort, "database": args.TargetDatabase,
+                           "table_or_query": args.TargetTableOrQuery, "user": args.TargetUser, "password": args.TargetPassword}
+
+   # main(source_table_config, target_table_config)
+    print(source_table_config, target_table_config)
