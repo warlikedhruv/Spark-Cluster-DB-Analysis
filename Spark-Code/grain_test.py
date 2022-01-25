@@ -88,7 +88,7 @@ def compare_2(original_table_df, target_table_df, primary_key):
         "Actual_"+primary_key,
         f.array([
             f.when(
-                f.col(c) != f.col("Expected_" + c),
+                f.col("Actual_" + c) != f.col("Expected_" + c),
                 f.struct(
                     f.col("Actual_"+c).alias("Actual_value"),
                     f.col("Expected_" + c).alias("Expected_value"),
