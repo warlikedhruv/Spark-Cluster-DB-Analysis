@@ -83,24 +83,25 @@ def compare_2(original_table_df, target_table_df, primary_key):
     col_names = df_Actual.schema.names
     df_cobined.show(30)
     col_names = original_table_df.schema.names
-    # df_new = df_cobined.select(
-    #     primary_key,
-    #     f.array([
-    #         f.when(
-    #             f.col(c) != f.col("Expected_" + c),
-    #             f.struct(
-    #                 f.col(c).alias("Actual_value"),
-    #                 f.col("Expected_" + c).alias("Expected_value"),
-    #                 f.lit(c).alias("Field")
-    #             )
-    #         ).alias(c)
-    #         for c in to_compare
-    #     ]).alias("temp")
-    # ) \
-    #     .select("id", f.explode("temp")) \
-    #     .dropna() \
-    #     .select("id", "col.*")
-    # df_new.show()
+    to_compare = [c for c in df_Actual.columns if c != "Actual_id"]
+    df_new = df_cobined.select(
+        "Actual_"+primary_key,
+        f.array([
+            f.when(
+                f.col(c) != f.col("Expected_" + c),
+                f.struct(
+                    f.col(c).alias("Actual_value"),
+                    f.col("Expected_" + c).alias("Expected_value"),
+                    f.lit(c).alias("Field")
+                )
+            ).alias(c)
+            for c in to_compare
+        ]).alias("temp")
+    ) \
+        .select("Actual_id", f.explode("temp")) \
+        .dropna() \
+        .select("Actual_id", "col.*")
+    df_new.show()
 
 def main(source_table_config,target_table_config ):
     """
