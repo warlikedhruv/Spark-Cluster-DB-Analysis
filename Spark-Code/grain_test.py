@@ -83,9 +83,9 @@ def compare_2(original_table_df, target_table_df, primary_key):
     col_names = df_Actual.schema.names
     df_cobined.show(30)
     col_names = original_table_df.schema.names
-    to_compare = [c for c in df_Actual.columns if c != "Actual_id"]
+    to_compare = [c for c in original_table_df.columns if c != "id"]
     df_new = df_cobined.select(
-        "Actual_"+primary_key,
+        primary_key,
         f.array([
             f.when(
                 f.col(c) != f.col("Expected_" + c),
@@ -98,9 +98,9 @@ def compare_2(original_table_df, target_table_df, primary_key):
             for c in to_compare
         ]).alias("temp")
     ) \
-        .select("Actual_id", f.explode("temp")) \
+        .select("id", f.explode("temp")) \
         .dropna() \
-        .select("Actual_id", "col.*")
+        .select("id", "col.*")
     df_new.show()
 
 def main(source_table_config,target_table_config ):
