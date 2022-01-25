@@ -71,6 +71,29 @@ def compare_df(original_table_df, target_table_df, primary_key):
     df3.withColumn("column_names", f.concat_ws(",", *map(lambda name: f.col(name + "_temp"), columns))).select("d1.*",
                                                                                                                "column_names").show(original_table_df.count())
 
+def compare_2(original_table_df, target_table_df, primary_key):
+    # these are the fields you want to compare
+    to_compare = [c for c in original_table_df.columns if c != "id"]
+    df_cobined = original_table_df.join(original_table_df, (original_table_df.id == target_table_df.id))
+    col_names = original_table_df.schema.names
+    df_new = df_cobined.select(
+        "id",
+        f.array([
+            f.when(
+                f.col(c) != f.col("Expected_" + c),
+                f.struct(
+                    f.col(c).alias("Actual_value"),
+                    f.col("Expected_" + c).alias("Expected_value"),
+                    f.lit(c).alias("Field")
+                )
+            ).alias(c)
+            for c in to_compare
+        ]).alias("temp")
+    ) \
+        .select("id", f.explode("temp")) \
+        .dropna() \
+        .select("id", "col.*")
+    df_new.show()
 
 def main(source_table_config,target_table_config ):
     """
@@ -91,6 +114,7 @@ def main(source_table_config,target_table_config ):
     source_df = create_df(spark, source_table_config)
     target_df = create_df(spark, target_table_config)
     compare_df(source_df, target_df, primary_key="id")
+    compare_2(source_df, target_df, primary_key="id")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
