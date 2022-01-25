@@ -85,7 +85,7 @@ def compare_2(original_table_df, target_table_df, primary_key):
     col_names = original_table_df.schema.names
     to_compare = [c for c in original_table_df.columns if c != "id"]
     df_new = df_cobined.select(
-        primary_key,
+        "Actual_"+primary_key,
         f.array([
             f.when(
                 f.col(c) != f.col("Expected_" + c),
