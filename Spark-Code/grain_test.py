@@ -75,9 +75,10 @@ def compare_2(original_table_df, target_table_df, primary_key):
     # these are the fields you want to compare
     to_compare = [c for c in original_table_df.columns if c != "id"]
     df_cobined = original_table_df.join(target_table_df, (original_table_df[primary_key] == target_table_df[primary_key]))
+    df_cobined.show(30)
     col_names = original_table_df.schema.names
     df_new = df_cobined.select(
-        "id",
+        primary_key,
         f.array([
             f.when(
                 f.col(c) != f.col("Expected_" + c),
