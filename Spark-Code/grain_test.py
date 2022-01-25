@@ -98,9 +98,9 @@ def compare_2(original_table_df, target_table_df, primary_key):
             for c in to_compare
         ]).alias("temp")
     ) \
-        .select("id", f.explode("temp")) \
+        .select("Actual_id", f.explode("temp")) \
         .dropna() \
-        .select("id", "col.*")
+        .select("Actual_id", "col.*")
     df_new.show()
 
 def main(source_table_config,target_table_config ):
