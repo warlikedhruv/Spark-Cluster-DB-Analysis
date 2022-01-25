@@ -79,7 +79,7 @@ def compare_2(original_table_df, target_table_df, primary_key):
     df_Actual = target_table_df.toDF(*new_column_name_list_2)
 
     # these are the fields you want to compare
-    df_cobined = df_Actual.join(df_Expected, (df_Actual.id == df_Expected.Expected_id))
+    df_cobined = df_Actual.join(df_Expected, (df_Actual.Actual_id == df_Expected.Expected_id))
     col_names = df_Actual.schema.names
     df_cobined.show(30)
     col_names = original_table_df.schema.names
