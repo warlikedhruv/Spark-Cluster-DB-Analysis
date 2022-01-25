@@ -72,29 +72,35 @@ def compare_df(original_table_df, target_table_df, primary_key):
                                                                                                                "column_names").show(original_table_df.count())
 
 def compare_2(original_table_df, target_table_df, primary_key):
+    new_column_name_list_1 = list(map(lambda x: "Expected_"+x, original_table_df.columns))
+    df_Expected = original_table_df.toDF(*new_column_name_list_1)
+
+    new_column_name_list_2 = list(map(lambda x: "Actual_" + x, target_table_df.columns))
+    df_Actual = target_table_df.toDF(*new_column_name_list_2)
+
     # these are the fields you want to compare
-    to_compare = [c for c in original_table_df.columns if c != "id"]
-    df_cobined = original_table_df.join(target_table_df, (original_table_df[primary_key] == target_table_df[primary_key]))
+    df_cobined = df_Actual.join(df_Expected, (df_Actual.id == df_Expected.Expected_id))
+    col_names = df_Actual.schema.names
     df_cobined.show(30)
     col_names = original_table_df.schema.names
-    df_new = df_cobined.select(
-        primary_key,
-        f.array([
-            f.when(
-                f.col(c) != f.col("Expected_" + c),
-                f.struct(
-                    f.col(c).alias("Actual_value"),
-                    f.col("Expected_" + c).alias("Expected_value"),
-                    f.lit(c).alias("Field")
-                )
-            ).alias(c)
-            for c in to_compare
-        ]).alias("temp")
-    ) \
-        .select("id", f.explode("temp")) \
-        .dropna() \
-        .select("id", "col.*")
-    df_new.show()
+    # df_new = df_cobined.select(
+    #     primary_key,
+    #     f.array([
+    #         f.when(
+    #             f.col(c) != f.col("Expected_" + c),
+    #             f.struct(
+    #                 f.col(c).alias("Actual_value"),
+    #                 f.col("Expected_" + c).alias("Expected_value"),
+    #                 f.lit(c).alias("Field")
+    #             )
+    #         ).alias(c)
+    #         for c in to_compare
+    #     ]).alias("temp")
+    # ) \
+    #     .select("id", f.explode("temp")) \
+    #     .dropna() \
+    #     .select("id", "col.*")
+    # df_new.show()
 
 def main(source_table_config,target_table_config ):
     """
