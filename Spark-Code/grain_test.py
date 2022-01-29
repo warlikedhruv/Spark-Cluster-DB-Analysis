@@ -92,7 +92,8 @@ def compare_2(original_table_df, target_table_df, primary_key):
                 f.struct(
                     f.col("Actual_"+c).alias("Actual_value"),
                     f.col("Expected_" + c).alias("Expected_value"),
-                    f.lit("Actual_"+ c).alias("Field")
+                    f.lit("False").alias("Result"),
+                    f.lit("Actual_"+ c).alias("Field"),
                 )
             ).alias(c)
             for c in to_compare
