@@ -95,11 +95,18 @@ def compare_2(original_table_df, target_table_df, primary_key):
                     f.lit("False").alias("Result"),
                     f.lit("Actual_"+ c).alias("Field"),
                 )
+            ).otherwise(
+                f.struct(
+                    f.col("Actual_" + c).alias("Actual_value"),
+                    f.col("Expected_" + c).alias("Expected_value"),
+                    f.lit("True").alias("Result"),
+                    f.lit("Actual_" + c).alias("Field"),
+                )
             ).alias(c)
             for c in to_compare
-        ]).alias("temp")
+        ]).alias("result_df")
     ) \
-        .select("Actual_id", f.explode("temp")) \
+        .select("Actual_id", f.explode("result_df")) \
         .dropna() \
         .select("Actual_id", "col.*")
     df_new.show()
